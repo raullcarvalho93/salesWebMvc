@@ -4,6 +4,6 @@
     {
         Pending,
         Billed,
-        Calceled
+        Cancelled
     }
 }

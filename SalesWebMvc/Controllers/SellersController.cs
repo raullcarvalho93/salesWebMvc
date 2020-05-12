@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SalesWebMvc.Services;
 using Microsoft.AspNetCore.Mvc;
 using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
-using Remotion.Linq.Parsing.ExpressionVisitors.Transformation.PredefinedTransformations;
+using SalesWebMvc.Services;
 using SalesWebMvc.Services.Exceptions;
 
 namespace SalesWebMvc.Controllers
@@ -21,6 +20,7 @@ namespace SalesWebMvc.Controllers
             _sellerService = sellerService;
             _departmentService = departmentService;
         }
+
         public IActionResult Index()
         {
             var list = _sellerService.FindAll();
@@ -30,7 +30,7 @@ namespace SalesWebMvc.Controllers
         public IActionResult Create()
         {
             var departments = _departmentService.FindAll();
-            var viewModel = new SellerFormViewModel { Departments = departments};
+            var viewModel = new SellerFormViewModel { Departments = departments };
             return View(viewModel);
         }
 
@@ -50,7 +50,7 @@ namespace SalesWebMvc.Controllers
             }
 
             var obj = _sellerService.FindById(id.Value);
-            if(obj == null)
+            if (obj == null)
             {
                 return NotFound();
             }
@@ -95,29 +95,29 @@ namespace SalesWebMvc.Controllers
                 return NotFound();
             }
 
-            var departments = _departmentService.FindAll();
-            var viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
+            List<Department> departments = _departmentService.FindAll();
+            SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
             return View(viewModel);
-        }
+        } 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Seller obj)
+        public IActionResult Edit(int id, Seller seller)
         {
-            if(id != obj.Id)
+            if (id != seller.Id)
             {
                 return BadRequest();
             }
             try
             {
-                _sellerService.Update(obj);
+                _sellerService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
-            catch(NotFoundException)
+            catch (NotFoundException)
             {
                 return NotFound();
             }
-            catch(DbConcurrencyException)
+            catch (DbConcurrencyException)
             {
                 return BadRequest();
             }

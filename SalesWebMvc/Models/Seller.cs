@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,7 +29,7 @@ namespace SalesWebMvc.Models
             Department = department;
         }
 
-        public void AddSeller(SalesRecord sr)
+        public void AddSales(SalesRecord sr)
         {
             Sales.Add(sr);
         }
@@ -42,7 +41,7 @@ namespace SalesWebMvc.Models
 
         public double TotalSales(DateTime initial, DateTime final)
         {
-            return Sales.Where(p => p.Date >= initial && p.Date <= final).Sum(p => p.Amount);
+            return Sales.Where(sr => sr.Date >= initial && sr.Date <= final).Sum(sr => sr.Amount);
         }
     }
 }
